@@ -1,0 +1,19 @@
+# Credentials and local configuration
+**/.env
+**/.env.*
+!**/.env.example
+*.pem
+*.key
+
+# Installed packages, private records and scratch/backups
+**/node_modules/
+**/work/
+**/*.db
+**/*.db-*
+**/*.sqlite
+**/*.sqlite3
+**/*.log
+**/coverage/
+**/.DS_Store
+**/Thumbs.db
+**/.vscode/
