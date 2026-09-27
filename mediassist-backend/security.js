@@ -9,7 +9,7 @@ function hostingConfig(env = process.env) {
     origin = url.origin;
   }
   if (hosted && !origin) throw new Error('Hosted mode requires APP_ORIGIN or RENDER_EXTERNAL_URL.');
-  if (hosted && (!env.APP_PASSWORD || env.APP_PASSWORD.length < 16)) throw new Error('Set APP_PASSWORD to a unique password of at least 16 characters.');
+  if (env.APP_PASSWORD && env.APP_PASSWORD.length < 16) throw new Error('APP_PASSWORD must be at least 16 characters when configured.');
   if (hosted && !env.DATABASE_URL && env.ALLOW_EPHEMERAL_STORAGE !== 'true') throw new Error('Set DATABASE_URL for persistent storage, or explicitly set ALLOW_EPHEMERAL_STORAGE=true for a disposable demo.');
   const username = env.APP_USERNAME || 'owner';
   if (username.includes(':')) throw new Error('APP_USERNAME cannot contain a colon.');

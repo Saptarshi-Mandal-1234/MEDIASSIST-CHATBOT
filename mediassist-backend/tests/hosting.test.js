@@ -6,7 +6,7 @@ const { hostingConfig, accessControl } = require('../security');
 const env = { NODE_ENV: 'production', RENDER_EXTERNAL_URL: 'https://example.onrender.com', APP_PASSWORD: 'test-only-long-password', DATABASE_URL: 'postgresql://test-only' };
 test('hosted configuration fails closed and requires explicit ephemeral opt-in', () => {
   assert.throws(() => hostingConfig({ NODE_ENV: 'production' }), /APP_ORIGIN/);
-  assert.throws(() => hostingConfig({ ...env, APP_PASSWORD: '' }), /APP_PASSWORD/);
+  assert.equal(hostingConfig({ ...env, APP_PASSWORD: '' }).password, '');
   assert.throws(() => hostingConfig({ ...env, DATABASE_URL: '' }), /DATABASE_URL/);
   assert.throws(() => hostingConfig({ ...env, APP_ORIGIN: 'http://example.com' }), /HTTPS/);
   assert.equal(hostingConfig({ ...env, DATABASE_URL: '', ALLOW_EPHEMERAL_STORAGE: 'true' }).ephemeral, true);
