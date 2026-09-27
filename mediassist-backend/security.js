@@ -22,7 +22,9 @@ function accessControl(config) {
     const host = req.headers.host || '';
     const expectedOrigin = config.hosted ? config.origin : 'http://' + host;
     if (config.hosted ? host !== new URL(config.origin).host : !/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host)) return res.status(403).json({ error: 'Host not allowed' });
-    if ((req.headers.origin && req.headers.origin !== expectedOrigin) || req.headers['sec-fetch-site'] === 'cross-site') return res.status(403).json({ error: 'Cross-origin requests are blocked' });
+    // A normal page navigation from the Render dashboard is cross-site.  Only
+    // reject cross-site API calls; those require the page-specific session token.
+    if (req.path.startsWith('/api/') && ((req.headers.origin && req.headers.origin !== expectedOrigin) || req.headers['sec-fetch-site'] === 'cross-site')) return res.status(403).json({ error: 'Cross-origin API requests are blocked' });
     if (!config.password) return next();
     if (Date.now() > resetAt) { failures = 0; resetAt = Date.now() + 60000; }
     if (failures >= 30) return res.status(429).set('Retry-After', '60').json({ error: 'Too many login attempts. Try again in a minute.' });

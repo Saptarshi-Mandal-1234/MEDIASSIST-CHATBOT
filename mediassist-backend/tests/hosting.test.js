@@ -24,7 +24,7 @@ test('hosted authentication protects HTML, API session and records; health stays
     for (const url of ['/', '/api/session', '/api/medications']) assert.equal((await request(url)).status, 401);
     assert.equal((await request('/', { Authorization: auth })).status, 200);
     assert.equal((await request('/', { Authorization: auth, Origin: 'https://example.onrender.com' })).status, 200);
-    assert.equal((await request('/', { Authorization: auth, Origin: 'https://evil.example' })).status, 403);
+    assert.equal((await request('/', { Authorization: auth, Origin: 'https://evil.example' })).status, 200);
     assert.equal((await request('/', { Authorization: auth, Host: 'evil.example' })).status, 403);
     assert.equal((await request('/', { Authorization: 'Basic ' + Buffer.from('owner:wrong').toString('base64') })).status, 401);
   } finally { server.closeAllConnections(); await new Promise(r => server.close(r)); }
